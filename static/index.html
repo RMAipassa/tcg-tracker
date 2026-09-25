@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TCG Tracker</title>
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#16181d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="TCG Tracker">
+<link rel="apple-touch-icon" href="/static/icon-180.png">
+<link rel="icon" href="/static/icon-192.png">
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header>
+  <h1>TCG Tracker</h1>
+  <span id="status-line"></span>
+</header>
+
+<main>
+  <section id="tab-alerts" class="tab active">
+    <div class="chips" id="alert-filter">
+      <button data-type="" class="on">All</button>
+      <button data-type="new">New</button>
+      <button data-type="restock">Restock</button>
+      <button data-type="price_drop">Drops</button>
+      <button data-type="target">Targets</button>
+    </div>
+    <ul class="list" id="alerts"></ul>
+  </section>
+
+  <section id="tab-products" class="tab">
+    <input id="search" type="search" placeholder="Search sealed products…" autocomplete="off">
+    <div class="chips" id="game-filter">
+      <button data-game="" class="on">All</button>
+      <button data-game="pokemon">Pokémon</button>
+      <button data-game="mtg">Magic</button>
+      <button data-game="naruto">Naruto</button>
+      <label class="toggle"><input type="checkbox" id="stock-only" checked> In stock</label>
+    </div>
+    <ul class="list" id="products"></ul>
+  </section>
+
+  <section id="tab-watchlist" class="tab">
+    <form id="watch-form" class="card">
+      <input name="url" type="url" required placeholder="Paste a product URL (Bescards, TCG Company, Intertoys)">
+      <div class="row">
+        <input name="target" type="number" step="0.01" min="0" inputmode="decimal" placeholder="Target price € (optional)">
+        <button type="submit">Watch</button>
+      </div>
+      <small>Alerts when the price drops to your target, and when it comes back in stock.</small>
+    </form>
+    <ul class="list" id="watchlist"></ul>
+  </section>
+
+  <section id="tab-settings" class="tab">
+    <div class="card">
+      <h2>Phone notifications</h2>
+      <p id="push-state">Checking…</p>
+      <div class="row">
+        <button id="push-enable">Enable on this device</button>
+        <button id="push-test" class="secondary">Send test</button>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Stores</h2>
+      <table id="stores"></table>
+      <div class="row">
+        <button id="run-now">Scan now</button>
+        <button id="logout" class="secondary">Log out</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<nav>
+  <button data-tab="alerts" class="on">🔔<span>Alerts</span></button>
+  <button data-tab="products">📦<span>Products</span></button>
+  <button data-tab="watchlist">🎯<span>Watchlist</span></button>
+  <button data-tab="settings">⚙️<span>Settings</span></button>
+</nav>
+
+<dialog id="login">
+  <form id="login-form">
+    <h2>TCG Tracker</h2>
+    <input name="password" type="password" placeholder="Password" required autocomplete="current-password">
+    <button type="submit">Log in</button>
+    <p class="error" id="login-error"></p>
+  </form>
+</dialog>
+
+<div id="toast"></div>
+<script src="/static/app.js"></script>
+</body>
+</html>

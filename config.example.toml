@@ -1,0 +1,52 @@
+# Copy this file to config.toml and fill it in.
+
+[general]
+# How often all stores are scanned.
+interval_minutes = 15
+# Pause between requests to the same store (be polite, avoid getting blocked).
+request_delay_seconds = 1.5
+# Games to track: pokemon, mtg, naruto
+games = ["pokemon", "mtg", "naruto"]
+# Catalog-wide price drop alert: only when a product drops at least this many percent.
+price_drop_percent = 10
+# Public URL of the web app (used for links in notifications).
+base_url = "https://tcg.example.nl"
+
+[web]
+host = "127.0.0.1"
+port = 8080
+# Password to log in to the web app / PWA.
+password = "change-me"
+# Any long random string; changing it logs out all devices.
+secret_key = "replace-with-a-long-random-string"
+
+[stores.bescards]
+enabled = true
+
+[stores.tcgcompany]
+enabled = true
+
+[stores.intertoys]
+enabled = true
+
+# Which events go to which channel.
+# Event types: new, restock, price_drop, target
+[discord]
+webhook_url = ""
+events = ["new", "restock", "price_drop", "target"]
+
+[email]
+enabled = false
+smtp_host = "smtp.gmail.com"
+smtp_port = 587
+use_starttls = true
+username = ""
+password = ""
+from = ""
+to = ""
+events = ["restock", "target"]
+
+[push]
+# Keys are generated automatically in data/ on first start.
+subject = "mailto:you@example.nl"
+events = ["new", "restock", "target"]
