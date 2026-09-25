@@ -29,6 +29,13 @@ enabled = true
 [stores.intertoys]
 enabled = true
 
+# bol.com: watchlist items only, via a headless browser (needs Playwright, see README).
+# bol.com blocks automated browsers; on a block page the store pauses for pause_hours_when_blocked.
+[stores.bol]
+enabled = false
+min_interval_minutes = 60
+pause_hours_when_blocked = 24
+
 # Which events go to which channel.
 # Event types: new, restock, price_drop, target
 [discord]

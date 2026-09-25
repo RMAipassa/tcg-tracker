@@ -14,10 +14,18 @@ USER_AGENT = (
 log = logging.getLogger("tracker.stores")
 
 
+class StoreBlocked(Exception):
+    """The store refused access (block page, captcha). The scanner stops asking it for this cycle."""
+
+
 class Store:
     name: str = ""
     label: str = ""
     domains: tuple[str, ...] = ()
+    # False: the store has no catalog scan, only watchlist items are fetched.
+    catalog: bool = True
+    # Minimum time between two fetches of the same watchlist item (0 = every cycle).
+    min_interval_minutes: int = 0
 
     def __init__(self, games: list[str], delay: float):
         self.games = set(games)

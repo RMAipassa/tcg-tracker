@@ -8,7 +8,7 @@ Scans every 15 minutes and alerts via **Discord**, **email** and **phone push** 
 | Bescards | Shopify `products.json` | full catalog |
 | TCG Company | WooCommerce Store API | full catalog (singles excluded) |
 | Intertoys | product data embedded in pages | first 36 trading-card listings + any watchlist URL |
-| bol.com | – | not supported yet (bot protection) |
+| bol.com | headless browser (Playwright), optional | watchlist URLs only, at most once per hour per product |
 
 ## Alerts
 
@@ -87,6 +87,32 @@ run the installer with `-SkipCaddy`, install `cloudflared` and point the tunnel 
 - **Watchlist** tab: paste any product URL from a supported store with an optional target price.
   This also works for items outside the catalog scan (e.g. singles, or older Intertoys listings).
 - **Settings**: store health (last successful scan, errors), *Scan now*, push setup.
+
+## bol.com (optional, experimental)
+
+bol.com only works through a real browser and **blocks automated browsers**. This adapter makes no attempt
+to hide that it is automated, so expect it to be blocked. When it sees a block page or captcha it pauses
+for `pause_hours_when_blocked` (default 24h) and shows the error under Settings → Stores.
+
+- Watchlist only: paste bol.com product URLs in the Watchlist tab. No catalog scan.
+- Each product is loaded at most once per `min_interval_minutes` (default 60, minimum 30).
+- Setup:
+  ```powershell
+  .venv\Scripts\python.exe -m pip install playwright
+  .venv\Scripts\python.exe -m playwright install chromium
+  ```
+  In AMP: enable *Run App Setup Command* with `python -m pip install playwright && python -m playwright install chromium`.
+  Then set `enabled = true` under `[stores.bol]` in `config.toml`.
+- Check the parser against a page you saved from your own browser (Ctrl+S → "Webpagina, alleen HTML"):
+  `python -m tracker.stores.bol saved-page.html`
+- Untested against the live site: it reads the page's schema.org product data (JSON-LD).
+  If the check above fails on your saved page, the parser needs adjusting.
+
+## TODO
+
+- bol.com via a sanctioned route, if one becomes available (partner programme / Marketing Catalog API),
+  or by reading bol.com "weer leverbaar" emails from a dedicated mailbox.
+- More Dutch TCG shops (Shopify/WooCommerce ones are quick to add).
 
 ## Maintenance
 

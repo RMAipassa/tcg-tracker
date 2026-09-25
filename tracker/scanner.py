@@ -1,8 +1,10 @@
 import logging
+from datetime import datetime, timedelta, timezone
 
 from .db import Database, now
 from .models import Snapshot
 from .stores import Store
+from .stores.base import StoreBlocked
 
 log = logging.getLogger("tracker.scanner")
 
@@ -19,6 +21,8 @@ class Scanner:
         seen: set[int] = set()
 
         for store in self.stores.values():
+            if not store.catalog:
+                continue
             run = self.db.one("SELECT initialized FROM store_runs WHERE store = ?", (store.name,))
             initialized = bool(run and run["initialized"])
             started = now()
@@ -80,25 +84,42 @@ class Scanner:
 
     def _check_watchlist(self, seen: set[int]) -> list[int]:
         events = []
-        for watch in self.db.query("SELECT * FROM watchlist"):
-            if watch["product_id"] not in seen:
-                store = self.stores.get(watch["store"])
-                if store is None:
-                    continue
+        blocked: set[str] = set()
+        fetched: dict[str, int] = {}
+        started = now()
+        watches = self.db.query("SELECT w.*, p.last_seen FROM watchlist w LEFT JOIN products p ON p.id = w.product_id")
+        for watch in watches:
+            store = self.stores.get(watch["store"])
+            if watch["product_id"] not in seen and store is not None and store.name not in blocked and self._due(store, watch["last_seen"]):
                 try:
                     snapshot = store.fetch(watch["url"])
+                except StoreBlocked as exc:
+                    log.warning("%s blocked access: %s", store.name, exc)
+                    self._record_run(store.name, started, error=f"Blocked: {exc}")
+                    blocked.add(store.name)
+                    snapshot = None
                 except Exception:
                     log.exception("Fetching watchlist item %s failed", watch["url"])
-                    continue
-                if snapshot is None:
-                    log.warning("Watchlist item %s not found", watch["url"])
-                    continue
-                product_id, new_events = self.upsert(snapshot, catalog=False, announce_new=False)
-                events += new_events
-                if product_id != watch["product_id"]:
-                    self.db.execute("UPDATE watchlist SET product_id = ? WHERE id = ?", (product_id, watch["id"]))
+                    snapshot = None
+                if snapshot is not None:
+                    product_id, new_events = self.upsert(snapshot, catalog=False, announce_new=False)
+                    events += new_events
+                    fetched[store.name] = fetched.get(store.name, 0) + 1
+                    if product_id != watch["product_id"]:
+                        self.db.execute("UPDATE watchlist SET product_id = ? WHERE id = ?", (product_id, watch["id"]))
             events += self.check_target(watch["id"])
+        # Watchlist-only stores have no catalog scan to report their health.
+        for name, count in fetched.items():
+            if not self.stores[name].catalog and name not in blocked:
+                self._record_run(name, started, count=count)
         return events
+
+    @staticmethod
+    def _due(store: Store, last_seen: str | None) -> bool:
+        if not store.min_interval_minutes or not last_seen:
+            return True
+        age = datetime.now(timezone.utc) - datetime.fromisoformat(last_seen)
+        return age >= timedelta(minutes=store.min_interval_minutes)
 
     def check_target(self, watch_id: int) -> list[int]:
         watch = self.db.one(

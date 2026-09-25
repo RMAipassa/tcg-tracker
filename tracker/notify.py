@@ -13,7 +13,7 @@ from .models import euro
 
 log = logging.getLogger("tracker.notify")
 
-STORE_LABELS = {"bescards": "Bescards", "tcgcompany": "TCG Company", "intertoys": "Intertoys"}
+STORE_LABELS = {"bescards": "Bescards", "tcgcompany": "TCG Company", "intertoys": "Intertoys", "bol": "bol.com"}
 GAME_LABELS = {"pokemon": "Pokémon", "mtg": "Magic", "naruto": "Naruto"}
 EVENT_LABELS = {"new": "🆕 New product", "restock": "✅ Back in stock", "price_drop": "📉 Price drop", "target": "🎯 Target price hit"}
 EVENT_COLORS = {"new": 0x5865F2, "restock": 0x2ECC71, "price_drop": 0xE67E22, "target": 0xE91E63}

@@ -1,5 +1,5 @@
 const $ = (sel) => document.querySelector(sel);
-const STORES = { bescards: "Bescards", tcgcompany: "TCG Company", intertoys: "Intertoys" };
+const STORES = { bescards: "Bescards", tcgcompany: "TCG Company", intertoys: "Intertoys", bol: "bol.com" };
 const GAMES = { pokemon: "Pokémon", mtg: "Magic", naruto: "Naruto" };
 const KINDS = {
   new: ["🆕 New", "#5865F2"],
