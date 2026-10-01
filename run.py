@@ -6,7 +6,24 @@
 """
 import argparse
 import logging
+import subprocess
+import sys
 from logging.handlers import RotatingFileHandler
+from pathlib import Path
+
+
+def _use_project_venv() -> None:
+    """Make `python run.py` use the environment created by install.ps1."""
+    if sys.prefix != getattr(sys, "base_prefix", sys.prefix):
+        return
+    root = Path(__file__).resolve().parent
+    python = root / ".venv" / ("Scripts/python.exe" if sys.platform == "win32" else "bin/python")
+    if python.is_file():
+        raise SystemExit(subprocess.call([str(python), str(Path(__file__).resolve()), *sys.argv[1:]]))
+
+
+if __name__ == "__main__":
+    _use_project_venv()
 
 from tracker.config import DATA_DIR, load_config
 

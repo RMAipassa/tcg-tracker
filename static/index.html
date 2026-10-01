@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>TCG Tracker</title>
 <link rel="manifest" href="/manifest.webmanifest">
-<meta name="theme-color" content="#16181d">
+<meta name="theme-color" content="#132421">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="TCG Tracker">
@@ -14,84 +14,253 @@
 <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-<header>
-  <h1>TCG Tracker</h1>
-  <span id="status-line"></span>
-</header>
-
-<main>
-  <section id="tab-alerts" class="tab active">
-    <div class="chips" id="alert-filter">
-      <button data-type="" class="on">All</button>
-      <button data-type="new">New</button>
-      <button data-type="restock">Restock</button>
-      <button data-type="price_drop">Drops</button>
-      <button data-type="target">Targets</button>
-    </div>
-    <ul class="list" id="alerts"></ul>
-  </section>
-
-  <section id="tab-products" class="tab">
-    <input id="search" type="search" placeholder="Search sealed products…" autocomplete="off">
-    <div class="chips" id="game-filter">
-      <button data-game="" class="on">All</button>
-      <button data-game="pokemon">Pokémon</button>
-      <button data-game="mtg">Magic</button>
-      <button data-game="naruto">Naruto</button>
-      <label class="toggle"><input type="checkbox" id="stock-only" checked> In stock</label>
-    </div>
-    <ul class="list" id="products"></ul>
-  </section>
-
-  <section id="tab-watchlist" class="tab">
-    <form id="watch-form" class="card">
-      <input name="url" type="url" required placeholder="Paste a product URL (Bescards, TCG Company, Intertoys, bol.com)">
-      <div class="row">
-        <input name="target" type="number" step="0.01" min="0" inputmode="decimal" placeholder="Target price € (optional)">
-        <button type="submit">Watch</button>
-      </div>
-      <small>Alerts when the price drops to your target, and when it comes back in stock.</small>
-    </form>
-    <ul class="list" id="watchlist"></ul>
-  </section>
-
-  <section id="tab-settings" class="tab">
-    <div class="card">
-      <h2>Phone notifications</h2>
-      <p id="push-state">Checking…</p>
-      <div class="row">
-        <button id="push-enable">Enable on this device</button>
-        <button id="push-test" class="secondary">Send test</button>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true"><span>T</span></div>
+      <div>
+        <strong>TCG Tracker</strong>
+        <span>Sealed product monitor</span>
       </div>
     </div>
-    <div class="card">
-      <h2>Stores</h2>
-      <table id="stores"></table>
-      <div class="row">
-        <button id="run-now">Scan now</button>
-        <button id="logout" class="secondary">Log out</button>
-      </div>
+
+    <nav aria-label="Main navigation">
+      <button data-tab="alerts" class="on" aria-selected="true">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg>
+        <span>Activity</span>
+      </button>
+      <button data-tab="products" aria-selected="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9zM4 7.5l8 4.5 8-4.5M12 12v9"/></svg>
+        <span>Products</span>
+      </button>
+      <button data-tab="watchlist" aria-selected="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21S4 16.5 4 9.5A4.5 4.5 0 0 1 12 6a4.5 4.5 0 0 1 8 3.5C20 16.5 12 21 12 21Z"/></svg>
+        <span>Watchlist</span>
+      </button>
+      <button data-tab="settings" aria-selected="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2h-4V21a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3 14H2.8v-4H3a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.2 7 7 4.2l.1.1a1.7 1.7 0 0 0 1.9.3A1.7 1.7 0 0 0 10 3V2.8h4V3a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.2v4H21a1.7 1.7 0 0 0-1.6 1Z"/></svg>
+        <span>Settings</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-note">
+      <span class="signal"></span>
+      <div><strong>Local tracker</strong><small>Private by default</small></div>
     </div>
-  </section>
-</main>
+  </aside>
 
-<nav>
-  <button data-tab="alerts" class="on">🔔<span>Alerts</span></button>
-  <button data-tab="products">📦<span>Products</span></button>
-  <button data-tab="watchlist">🎯<span>Watchlist</span></button>
-  <button data-tab="settings">⚙️<span>Settings</span></button>
-</nav>
+  <div class="workspace">
+    <header class="topbar">
+      <div class="mobile-brand" aria-hidden="true">T</div>
+      <div class="page-heading">
+        <p id="page-kicker">Collection monitor</p>
+        <h1 id="page-title">Activity</h1>
+      </div>
+      <div class="status-pill" id="status-pill">
+        <span class="status-dot"></span>
+        <span id="status-line">Connecting...</span>
+      </div>
+    </header>
 
-<dialog id="login">
+    <main>
+      <section id="tab-alerts" class="tab active">
+        <div class="metrics" aria-label="Collection summary">
+          <article><span>Available now</span><strong id="metric-in-stock">-</strong><small>sealed products</small></article>
+          <article><span>Catalog size</span><strong id="metric-products">-</strong><small>tracked listings</small></article>
+          <article><span>Active stores</span><strong id="metric-stores">-</strong><small>data sources</small></article>
+          <article><span>Last update</span><strong id="metric-updated">-</strong><small>most recent scan</small></article>
+        </div>
+        <div class="section-heading">
+          <div><p class="eyebrow">Signal feed</p><h2>Recent activity</h2></div>
+          <span class="section-count" id="alert-count"></span>
+        </div>
+        <div class="chips" id="alert-filter" aria-label="Filter alerts">
+          <button data-type="" class="on">All</button>
+          <button data-type="new">New</button>
+          <button data-type="restock">Restocks</button>
+          <button data-type="price_drop">Price drops</button>
+          <button data-type="target">Targets</button>
+        </div>
+        <ul class="list activity-list" id="alerts"></ul>
+      </section>
+
+      <section id="tab-products" class="tab">
+        <div class="section-heading page-section-heading">
+          <div><p class="eyebrow">Live inventory</p><h2>Sealed products</h2><p>Compare availability across every enabled store.</p></div>
+          <span class="section-count" id="product-count"></span>
+        </div>
+        <div class="filter-panel">
+          <div class="filter-topline">
+            <label class="search-field">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+              <input id="search" type="search" placeholder="Search products or sets" autocomplete="off">
+            </label>
+            <label class="filter-field sort-field"><span>Sort by</span><select id="filter-sort">
+              <option value="newest">Newest first</option>
+              <option value="updated">Recently updated</option>
+              <option value="price_low">Price: low to high</option>
+              <option value="price_high">Price: high to low</option>
+              <option value="title_asc">Name: A to Z</option>
+              <option value="title_desc">Name: Z to A</option>
+              <option value="store">Store</option>
+              <option value="availability">Availability</option>
+              <option value="type">Product type</option>
+              <option value="oldest">Oldest first</option>
+            </select></label>
+          </div>
+          <div class="chips" id="game-filter" aria-label="Filter games">
+            <button data-game="" class="on">All games</button>
+            <button data-game="pokemon">Pokémon</button>
+            <button data-game="mtg">Magic</button>
+            <button data-game="naruto">Naruto</button>
+          </div>
+          <details class="advanced-filters" id="advanced-filters">
+            <summary><span>More filters</span><small id="active-filter-count">1 active</small></summary>
+            <div class="filter-grid">
+              <label class="filter-field"><span>Store</span><select id="filter-store">
+                <option value="">All stores</option>
+              </select></label>
+              <label class="filter-field"><span>Availability</span><select id="filter-availability">
+                <option value="in_stock">In stock</option>
+                <option value="all">In and out of stock</option>
+                <option value="out_of_stock">Out of stock</option>
+              </select></label>
+              <label class="filter-field"><span>Product type</span><select id="filter-type">
+                <option value="">All types</option>
+                <option value="booster_box">Booster box / display</option>
+                <option value="booster_bundle">Booster bundle</option>
+                <option value="booster_pack">Booster pack</option>
+                <option value="etb">Elite Trainer Box</option>
+                <option value="collection">Collection</option>
+                <option value="tin">Tin</option>
+                <option value="blister">Blister</option>
+                <option value="deck">Deck</option>
+                <option value="other">Other</option>
+              </select></label>
+              <label class="filter-field"><span>Language hint</span><select id="filter-language">
+                <option value="">All languages</option>
+                <option value="english">English</option>
+                <option value="dutch">Dutch</option>
+                <option value="japanese">Japanese</option>
+                <option value="korean">Korean</option>
+                <option value="chinese">Chinese</option>
+                <option value="french">French</option>
+                <option value="german">German</option>
+                <option value="spanish">Spanish</option>
+                <option value="italian">Italian</option>
+                <option value="portuguese">Portuguese</option>
+                <option value="unspecified">Not specified</option>
+              </select></label>
+              <label class="filter-field"><span>Minimum price</span><input id="filter-min-price" type="number" min="0" step="0.01" inputmode="decimal" placeholder="EUR 0,00"></label>
+              <label class="filter-field"><span>Maximum price</span><input id="filter-max-price" type="number" min="0" step="0.01" inputmode="decimal" placeholder="No maximum"></label>
+              <label class="filter-field"><span>First seen</span><select id="filter-added">
+                <option value="">Any time</option>
+                <option value="day">Last 24 hours</option>
+                <option value="week">Last 7 days</option>
+                <option value="month">Last 30 days</option>
+                <option value="quarter">Last 90 days</option>
+                <option value="year">Last year</option>
+              </select></label>
+              <label class="filter-field"><span>Alert history</span><select id="filter-event">
+                <option value="">Any history</option>
+                <option value="any">Has an alert</option>
+                <option value="new">New arrival</option>
+                <option value="restock">Restocked</option>
+                <option value="price_drop">Price dropped</option>
+                <option value="target">Hit a target</option>
+              </select></label>
+              <label class="filter-field"><span>Price information</span><select id="filter-price-status">
+                <option value="">Any price status</option>
+                <option value="known">Price available</option>
+                <option value="unknown">Price unavailable</option>
+              </select></label>
+              <label class="filter-field"><span>Results shown</span><select id="filter-limit">
+                <option value="60">60 products</option>
+                <option value="120" selected>120 products</option>
+                <option value="300">300 products</option>
+                <option value="500">500 products</option>
+              </select></label>
+              <label class="filter-check"><input type="checkbox" id="filter-watched"><span>Only products on my watchlist</span></label>
+            </div>
+            <div class="filter-actions"><span>Language is inferred only when a listing names it.</span><button type="button" id="filter-reset" class="secondary">Reset filters</button></div>
+          </details>
+        </div>
+        <ul class="list product-grid" id="products"></ul>
+      </section>
+
+      <section id="tab-watchlist" class="tab">
+        <div class="section-heading page-section-heading">
+          <div><p class="eyebrow">Personal targets</p><h2>Watchlist</h2><p>Follow exact listings and get notified at your price.</p></div>
+          <span class="section-count" id="watch-count"></span>
+        </div>
+        <div class="watch-layout">
+          <form id="watch-form" class="panel watch-form">
+            <div class="panel-heading"><span>01</span><div><h3>Add a listing</h3><p>Paste a supported product URL.</p></div></div>
+            <label>Product URL<input name="url" type="url" required placeholder="https://..."></label>
+            <label>Target price <span>optional</span><input name="target" type="number" step="0.01" min="0" inputmode="decimal" placeholder="EUR 0,00"></label>
+            <button type="submit">Add to watchlist</button>
+            <small>Supports Bescards, TCG Company, Intertoys and bol.com.</small>
+          </form>
+          <div class="watch-results">
+            <div class="subheading"><h3>Tracked listings</h3><span>Current price vs. target</span></div>
+            <ul class="list" id="watchlist"></ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="tab-settings" class="tab">
+        <div class="section-heading page-section-heading">
+          <div><p class="eyebrow">System control</p><h2>Settings</h2><p>Notifications, scan health and session controls.</p></div>
+        </div>
+        <div class="settings-grid">
+          <div class="panel">
+            <div class="panel-heading"><span>01</span><div><h3>Phone notifications</h3><p>Receive restocks and target alerts.</p></div></div>
+            <p class="state-copy" id="push-state">Checking notification support...</p>
+            <div class="button-row">
+              <button id="push-enable">Enable on this device</button>
+              <button id="push-test" class="secondary">Send test</button>
+            </div>
+          </div>
+          <div class="panel stores-panel">
+            <div class="panel-heading"><span>02</span><div><h3>Store health</h3><p>Latest catalog scan for every source.</p></div></div>
+            <div id="stores" class="store-list"></div>
+            <div class="button-row settings-actions">
+              <button id="run-now">Scan all stores</button>
+              <button id="logout" class="secondary">Log out</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<dialog id="target-dialog" class="modal">
+  <form id="target-form">
+    <p class="eyebrow">Watch this product</p>
+    <h2>Add a target price</h2>
+    <p id="target-product" class="modal-copy"></p>
+    <label>Target price <span>optional</span><input name="target" type="number" step="0.01" min="0" inputmode="decimal" placeholder="EUR 0,00"></label>
+    <div class="button-row">
+      <button type="submit">Start watching</button>
+      <button type="button" id="target-cancel" class="secondary">Cancel</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="login" class="login-modal">
   <form id="login-form">
-    <h2>TCG Tracker</h2>
+    <div class="login-mark" aria-hidden="true">T</div>
+    <p class="eyebrow">Private collection monitor</p>
+    <h2>Welcome back</h2>
+    <p class="modal-copy">Sign in to view your products and alerts.</p>
     <input name="password" type="password" placeholder="Password" required autocomplete="current-password">
-    <button type="submit">Log in</button>
+    <button type="submit">Open tracker</button>
     <p class="error" id="login-error"></p>
   </form>
 </dialog>
 
-<div id="toast"></div>
+<div id="toast" role="status" aria-live="polite"></div>
 <script src="/static/app.js"></script>
 </body>
 </html>

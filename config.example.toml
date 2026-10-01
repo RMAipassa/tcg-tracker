@@ -29,12 +29,415 @@ enabled = true
 [stores.intertoys]
 enabled = true
 
-# bol.com: watchlist items only, via a headless browser (needs Playwright, see README).
-# bol.com blocks automated browsers; on a block page the store pauses for pause_hours_when_blocked.
+# bol.com: Pokemon category catalog plus watchlist URLs, via Playwright (see README).
+# A catalog_pages value of 0 scans every page; set a positive number to limit each catalog scan.
 [stores.bol]
 enabled = false
+catalog_interval_minutes = 60
+catalog_pages = 0
 min_interval_minutes = 60
 pause_hours_when_blocked = 24
+
+# Public Magento GraphQL catalog. It remains healthy when its TCG category is empty.
+[stores.top1toys]
+enabled = false
+
+# Server-rendered Pokemon card category; marketplace sellers are excluded.
+[stores.mediamarkt]
+enabled = false
+
+[stores.tcgshop]
+enabled = false
+
+[stores.peppicollect]
+enabled = false
+
+[stores.yellowlightningcards]
+enabled = false
+
+[stores.spellenhuis]
+enabled = false
+
+[stores.cardgameshop]
+enabled = false
+
+# Stock is read from product pages and cached for an hour to limit requests.
+[stores.tcgino]
+enabled = false
+catalog_interval_minutes = 60
+
+[stores.pkmncards]
+enabled = false
+
+[stores.bazaarofmagic]
+enabled = false
+
+[stores.cardcorner]
+enabled = false
+
+[stores.speelkaartenwinkel]
+enabled = false
+
+[stores.pokejapan]
+enabled = false
+
+# MyOnlineStore category pages are cached for an hour to respect strict request limits.
+[stores.tcgkingdom]
+enabled = false
+
+# Public Shopify catalogs verified from the TCGSniper store directory.
+# Enable any stores you want to scan. More compatible shops only need another section like these.
+[stores.pokeca]
+enabled = false
+platform = "shopify"
+label = "Pokeca"
+base_url = "https://www.pokeca.nl"
+
+[stores.miraicards]
+enabled = false
+platform = "shopify"
+label = "Mirai Cards"
+base_url = "https://www.miraicards.com"
+
+[stores.magictraders]
+enabled = false
+platform = "shopify"
+label = "Magic Traders"
+base_url = "https://magictraders.nl"
+
+[stores.cavecards]
+enabled = false
+platform = "shopify"
+label = "Cave Cards"
+base_url = "https://cavecards.nl"
+collections = { pokemon = "pokemon" }
+default_game = "pokemon"
+
+[stores.tcgrocks]
+enabled = false
+platform = "shopify"
+label = "TCG Rocks"
+base_url = "https://tcgrocks.nl"
+
+[stores.beamcards]
+enabled = false
+platform = "shopify"
+label = "Beam Cards"
+base_url = "https://beamcardshop.com"
+
+[stores.jdcollectibles]
+enabled = false
+platform = "shopify"
+label = "JD Collectibles"
+base_url = "https://jd-collectibles.nl"
+
+[stores.collgamers]
+enabled = false
+platform = "shopify"
+label = "CollGamers"
+base_url = "https://collgamers.nl"
+
+[stores.deckkingdom]
+enabled = false
+platform = "shopify"
+label = "Deck Kingdom"
+base_url = "https://deckkingdom.nl"
+
+[stores.tcgplatform]
+enabled = false
+platform = "shopify"
+label = "TCG Platform"
+base_url = "https://tcgplatform.nl"
+
+# Additional verified Shopify catalogs from the TCGSniper directory.
+[stores.pokeplaza]
+enabled = false
+platform = "shopify"
+label = "Poke Plaza"
+base_url = "https://pokeplaza.com"
+default_game = "pokemon"
+
+[stores.tcgviert]
+enabled = false
+platform = "shopify"
+label = "TCG Viert"
+base_url = "https://tcgviert.com"
+
+[stores.cardstore]
+enabled = false
+platform = "shopify"
+label = "Cardstore"
+base_url = "https://cardstore.nl"
+
+[stores.kingcards]
+enabled = false
+platform = "shopify"
+label = "Kingcards"
+base_url = "https://www.kingcards.nl"
+
+[stores.fantasiacards]
+enabled = false
+platform = "shopify"
+label = "Fantasia Cards"
+base_url = "https://fantasiacards.de"
+
+[stores.gamerzparadise]
+enabled = false
+platform = "shopify"
+label = "GamerzParadise"
+base_url = "https://gamerzparadize.nl"
+
+[stores.cardbinder]
+enabled = false
+platform = "shopify"
+label = "Cardbinder"
+base_url = "https://card-binder.com"
+
+[stores.cardsrfun]
+enabled = false
+platform = "shopify"
+label = "Cards R Fun"
+base_url = "https://cardsrfun.com"
+
+[stores.danihagebeuk]
+enabled = false
+platform = "shopify"
+label = "DaniHagebeukTCG"
+base_url = "https://danihagebeuktcg.nl"
+default_game = "pokemon"
+
+[stores.debroergrot]
+enabled = false
+platform = "shopify"
+label = "De Broergrot"
+base_url = "https://www.debroergrot.nl"
+default_game = "pokemon"
+
+[stores.fantasyworld]
+enabled = false
+platform = "shopify"
+label = "Fantasy World"
+base_url = "https://fantasyworld.be"
+
+[stores.gadgetpoint]
+enabled = false
+platform = "shopify"
+label = "Gadgetpoint"
+base_url = "https://www.gadgetpoint.nl"
+
+[stores.knoldex]
+enabled = false
+platform = "shopify"
+label = "Knoldex"
+base_url = "https://knoldex.nl"
+default_game = "pokemon"
+
+[stores.liwotcg]
+enabled = false
+platform = "shopify"
+label = "Liwo TCG"
+base_url = "https://liwotcg.nl"
+default_game = "pokemon"
+
+[stores.nosticcards]
+enabled = false
+platform = "shopify"
+label = "Nostic Cards"
+base_url = "https://www.nostic-cards.nl"
+
+[stores.otakura]
+enabled = false
+platform = "shopify"
+label = "Otakura"
+base_url = "https://otakura.com"
+
+[stores.pikapanda]
+enabled = false
+platform = "shopify"
+label = "PikaPanda"
+base_url = "https://pikapanda.nl"
+default_game = "pokemon"
+
+[stores.rarecards]
+enabled = false
+platform = "shopify"
+label = "RareCards"
+base_url = "https://rarecards.nl"
+default_game = "pokemon"
+
+[stores.rubygator]
+enabled = false
+platform = "shopify"
+label = "RubyGator"
+base_url = "https://rubygator.nl"
+default_game = "pokemon"
+
+[stores.tcgreus]
+enabled = false
+platform = "shopify"
+label = "TCG Reus"
+base_url = "https://www.tcgreus.nl"
+
+[stores.tsupply]
+enabled = false
+platform = "shopify"
+label = "T-Supply"
+base_url = "https://www.t-supply.be"
+
+[stores.yellowducktcg]
+enabled = false
+platform = "shopify"
+label = "Yellow Duck TCG"
+base_url = "https://yellowducktcg.nl"
+default_game = "pokemon"
+
+# Additional verified WooCommerce Store APIs.
+[stores.davidptcg]
+enabled = false
+platform = "woocommerce"
+label = "David PTCG"
+base_url = "https://davidptcg.nl"
+default_game = "pokemon"
+
+[stores.packbase]
+enabled = false
+platform = "woocommerce"
+label = "Packbase"
+base_url = "https://packbase.nl"
+default_game = "pokemon"
+
+[stores.arlytrading]
+enabled = false
+platform = "woocommerce"
+label = "Arly Trading"
+base_url = "https://arlytrading.nl"
+request_delay_seconds = 3.2
+
+[stores.ultracards]
+enabled = false
+platform = "woocommerce"
+label = "UltraCards"
+base_url = "https://ultracards.eu"
+default_game = "pokemon"
+request_delay_seconds = 3.2
+
+[stores.vinticards]
+enabled = false
+platform = "woocommerce"
+label = "VintiCards"
+base_url = "https://vinticards.nl"
+request_delay_seconds = 3.2
+
+[stores.tradingcardgamestore]
+enabled = false
+platform = "woocommerce"
+label = "Trading Card Game Store"
+base_url = "https://tradingcardgamestore.com"
+
+[stores.zycards]
+enabled = false
+platform = "woocommerce"
+label = "ZyCards"
+base_url = "https://zycards.nl"
+
+# Public Magento GraphQL catalog. Category ids are stable Magento identifiers.
+[stores.gameshoptwente]
+enabled = false
+platform = "magento"
+label = "Gameshop Twente"
+base_url = "https://gameshop-twente.nl"
+categories = { pokemon = "102928", mtg = "102959", naruto = "103022" }
+
+# JouwWeb stores use one or more server-rendered catalog category paths.
+[stores.memitcg]
+enabled = false
+platform = "jouwweb"
+label = "MEMI TCG"
+base_url = "https://www.memitcg.nl"
+default_game = "pokemon"
+catalog_paths = ["/winkel/booster-boxen", "/winkel/collection-boxen", "/winkel/elite-trainer-boxen", "/winkel/tins", "/winkel/blisters", "/winkel/packs", "/winkel/japans", "/winkel/specials", "/winkel/mystery-boxen"]
+
+[stores.gamebirds]
+enabled = false
+platform = "jouwweb"
+label = "GameBirds"
+base_url = "https://www.gamebirds.nl"
+default_game = "pokemon"
+catalog_paths = ["/pokemon/boosterboxen", "/pokemon/elite-trainer-boxen", "/pokemon/tins", "/pokemon/collection-boxen", "/pokemon/booster-packs"]
+
+[stores.catchandsleeve]
+enabled = false
+platform = "jouwweb"
+label = "Catch & Sleeve"
+base_url = "https://www.catchandsleeve.nl"
+default_game = "pokemon"
+catalog_paths = ["/pokemon/booster-boxes", "/pokemon/elite-trainer-boxen", "/pokemon/booster-bundles", "/pokemon/blisters", "/pokemon/booster-packs", "/pokemon/collectables", "/pokemon/tins", "/pokemon/japans", "/pokemon/chinees-simplified", "/pokemon/cases-bulk"]
+
+# Public Odoo catalog. Values may be category ids or /shop/category/... paths.
+[stores.nerdgeek]
+enabled = false
+platform = "odoo"
+label = "NerdGeek"
+base_url = "https://www.nerdgeek.nl"
+domains = ["nerdgeek.nl", "nerdgeek.eu"]
+categories = { pokemon = "14", mtg = "111", naruto = "280" }
+
+# Cached collection catalogs reduce repeat requests; large feeds are paced conservatively.
+[stores.pokepower]
+enabled = false
+
+[stores.cardsbybeard]
+enabled = false
+
+[stores.outpostbrussels]
+enabled = false
+
+[stores.optcg]
+enabled = false
+platform = "shopify"
+label = "OPTCG"
+base_url = "https://optcg.nl"
+
+# Category-scoped WooCommerce catalog avoids a large singles inventory.
+[stores.globalcardshop]
+enabled = false
+platform = "woocommerce"
+label = "Global Card Shop"
+base_url = "https://globalcardshop.com"
+categories = { pokemon = [56, 61, 835], mtg = 837 }
+request_delay_seconds = 10
+catalog_interval_minutes = 90
+
+[stores.oppacards]
+enabled = false
+
+[stores.maximus]
+enabled = false
+
+[stores.ecardshop]
+enabled = false
+platform = "jouwweb"
+label = "E-cardshop"
+base_url = "https://www.e-cardshop.nl"
+default_game = "pokemon"
+catalog_paths = ["/boosterboxen", "/boosterpacks", "/elite-trainer-boxen", "/collection-boxen"]
+
+[stores.levelupshop]
+enabled = false
+platform = "jouwweb"
+label = "LevelUpShop"
+base_url = "https://www.levelupshop.be"
+default_game = "pokemon"
+catalog_paths = ["/trading-cards/pokemon-tcg/etb", "/trading-cards/pokemon-tcg/booster-bundle", "/trading-cards/pokemon-tcg/booster-packs", "/trading-cards/pokemon-tcg/booster-box", "/trading-cards/pokemon-tcg/mini-tin", "/trading-cards/pokemon-tcg/special-boxen", "/trading-cards/pokemon-tcg/japanse-boxen", "/trading-cards/pokemon-tcg/chinese-boxen"]
+
+# Generic WooCommerce stores use the same shape with platform = "woocommerce".
+# Set api_url only when the shop's Store API is not at the standard path.
+# [stores.example_woo]
+# enabled = false
+# platform = "woocommerce"
+# label = "Example WooCommerce Shop"
+# base_url = "https://example.nl"
+# api_url = "https://example.nl/wp-json/wc/store/v1/products"
 
 # Which events go to which channel.
 # Event types: new, restock, price_drop, target

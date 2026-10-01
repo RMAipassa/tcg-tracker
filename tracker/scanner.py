@@ -28,11 +28,15 @@ class Scanner:
             started = now()
             try:
                 snapshots = store.scan()
+            except StoreBlocked as exc:
+                log.warning("%s blocked access: %s", store.name, exc)
+                self._record_run(store.name, started, error=f"Blocked: {exc}")
+                continue
             except Exception as exc:  # one broken store must not stop the others
                 log.exception("Scan of %s failed", store.name)
                 self._record_run(store.name, started, error=f"{type(exc).__name__}: {exc}")
                 continue
-            if not snapshots:
+            if not snapshots and not store.allow_empty_catalog:
                 # Almost certainly a layout change or block, not an empty store.
                 self._record_run(store.name, started, error="Scan returned 0 products")
                 continue
@@ -41,6 +45,10 @@ class Scanner:
                 product_id, new_events = self.upsert(snapshot, catalog=True, announce_new=initialized)
                 seen.add(product_id)
                 store_events += new_events
+            catalog_ids = {snapshot.store_product_id for snapshot in snapshots}
+            for product in self.db.query("SELECT id, store_product_id FROM products WHERE store = ? AND in_catalog = 1", (store.name,)):
+                if product["store_product_id"] not in catalog_ids:
+                    self.db.execute("UPDATE products SET in_catalog = 0 WHERE id = ?", (product["id"],))
             events += store_events
             self._record_run(store.name, started, count=len(snapshots))
             log.info("%s: %d products, %d events", store.name, len(snapshots), len(store_events))

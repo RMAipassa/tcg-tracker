@@ -23,12 +23,8 @@ $principal = New-ScheduledTaskPrincipal -UserId "SYSTEM" -LogonType ServiceAccou
 $trigger = New-ScheduledTaskTrigger -AtStartup
 
 if (-not $CaddyOnly) {
-    # 1. Python virtualenv + dependencies
-    $py = Get-Command py -ErrorAction SilentlyContinue
-    if (-not $py) { throw "Python not found. Install Python 3.12+ from https://www.python.org/downloads/ (tick 'Add python.exe to PATH')." }
-    if (-not (Test-Path ".venv")) { & py -3 -m venv .venv }
-    & .venv\Scripts\python.exe -m pip install --upgrade pip | Out-Null
-    & .venv\Scripts\python.exe -m pip install -r requirements.txt
+    # 1. Python virtualenv, application dependencies, and Playwright Chromium
+    & "$Root\install.ps1"
 
     # 2. Config
     if (-not (Test-Path "config.toml")) {

@@ -59,6 +59,11 @@ class Notifier:
         self.db = db
         self.config = config
         self.base_url = config["general"].get("base_url", "").rstrip("/")
+        STORE_LABELS.update({
+            name: options["label"]
+            for name, options in config.get("stores", {}).items()
+            if isinstance(options, dict) and options.get("label")
+        })
 
     def send(self, event_ids: list[int]) -> None:
         events = load_events(self.db, event_ids)

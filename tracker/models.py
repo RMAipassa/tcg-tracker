@@ -11,8 +11,19 @@ _GAME_PATTERNS = {
 
 # Accessories and merchandise that are never sealed product.
 _NOT_SEALED = re.compile(
-    r"sleeve|portfolio|binder(?! collection)|verzamelmap|map\b|playmat|deck ?box|toploader|"
-    r"funko|pop!|lego|knuffel|pluche|plush|rugzak|backpack|display case|acryl",
+    r"sleeves?\b|portfolio|binder(?! collection)|verzamelmap|map\b|playmat|deck ?box|toploader|"
+    r"album|folio|pocket pages?|sideloading pages?|sorteerbak|sort box|divider|kaartenscheider|"
+    r"slab|graded|protector|beschermhoes|card holders?|kaarten?houder|opberghouder|storage box|"
+    r"display frame|card frame|booster pack holder|muurdisplay|muurhouder|muurbeugel|fotolijst|kaartenstandaard|one touch standaard|"
+    r"centering tool|whitening tool|scan box|telefoon houder|ringband|bewaartas|sleutelhanger|keychain|"
+    r"beschermkoffer|speelkleed|kaarthoes|ultra pro|funko|pop!|lego|knuffel|pluche|plush|rugzak|"
+    r"backpack|display case|card case|hard case|dispenser|horloge|\bwatch\b|\bklok\b|acryl|\bmok\b|kleurenpen|"
+    r"blind box|battle figuur|battle figure|mini figuur|mini figure|figuur pack|figure pack|figure set(?! collection)",
+    re.I,
+)
+_SEALED_MARKERS = re.compile(
+    r"booster|\bbox\b|bundle|bundel|collection|collectie|\btin\b|blister|\bdecks?\b|chest|\bpack\b|display|"
+    r"elite trainer|\betb\b|battle academy|checklane|build (?:and|&) battle|trainer toolkit|advent calendar|adventskalender",
     re.I,
 )
 
@@ -38,6 +49,11 @@ def detect_game(text: str) -> str | None:
 
 def looks_sealed(title: str) -> bool:
     return not _NOT_SEALED.search(title)
+
+
+def is_sealed_product(title: str) -> bool:
+    """Conservative title check for uncurated store-wide catalogs."""
+    return looks_sealed(title) and bool(_SEALED_MARKERS.search(title))
 
 
 def euro(cents: int | None) -> str:
